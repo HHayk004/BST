@@ -3,11 +3,10 @@
 
 int main()
 {
-    BST<int> tree = {10, 5, 18, 12, 22, 21, 24, 20};
+    BST<int> tree = {10, 5, 18, 12, 13, 22, 21, 24, 20};
 
-    tree.remove(10);
-    tree.inOrder();
-    std::cout << "\n";
+    tree.level_order();
+    std::cout << std::endl;
 
     return 0;
 }

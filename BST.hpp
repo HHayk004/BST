@@ -1,7 +1,7 @@
 #ifndef BST_HPP
     #define BST_HPP
     
-    #include "Queue/queue.h"
+    #include "../Queue/queue.h"
 
     template <typename T>
     BST<T>::BST() : m_root(nullptr) {}
@@ -30,6 +30,7 @@
         }
 
         delete root;
+        root = nullptr;
     }
 
     template <typename T>
@@ -37,7 +38,8 @@
     {
         if (m_root)
         {
-            drop(m_root);    
+            drop(m_root);
+            m_root = nullptr;    
         }
     }
 
@@ -105,32 +107,7 @@
             }
         }
     }
-
-    template <typename T>
-    bool BST<T>::search(T value) const
-    {
-        if (value < 0)
-        {
-            return false;
-        }
-
-        Node* root = m_root;
-        while (root && root->val != value)
-        {
-            if (value < root->val)
-            {
-                root = root->left;
-            }
-
-            else
-            {
-                root = root->right;
-            }
-        }
-
-        return root;
-    }
-
+ 
     template <typename T>
     void BST<T>::remove(T value)
     {
@@ -206,6 +183,42 @@
     }
 
     template <typename T>
+    void BST<T>::clear()
+    {
+        if (m_root)
+        {
+            drop(m_root);
+            m_root = nullptr;
+        }
+    }
+
+    template <typename T>
+    bool BST<T>::search(T value) const
+    {
+        if (value < 0)
+        {
+            return false;
+        }
+
+        Node* root = m_root;
+        while (root && root->val != value)
+        {
+            if (value < root->val)
+            {
+                root = root->left;
+            }
+
+            else
+            {
+                root = root->right;
+            }
+        }
+
+        return root;
+    }
+
+
+    template <typename T>
     void BST<T>::inOrder() const
     {
         inOrderImpl(m_root);
@@ -219,6 +232,23 @@
             inOrderImpl(root->left);
             std::cout << root->val << ' ';
             inOrderImpl(root->right);
+        }
+    }
+
+    template <typename T>
+    void BST<T>::preOrder() const
+    {
+        preOrderImpl(m_root);
+    }
+
+    template <typename T>
+    void BST<T>::preOrderImpl(BST<T>::Node* root) const
+    {
+        if (root)
+        {
+            std::cout << root->val << ' ';
+            preOrderImpl(root->left);
+            preOrderImpl(root->right);
         }
     }
 
@@ -240,7 +270,7 @@
     }
 
     template <typename T>
-    void BST<T>::preOrder() const
+    void BST<T>::level_order() const
     {
         Hayk::Queue<Node*> nodes;
         nodes.push(m_root);
@@ -261,6 +291,110 @@
             std::cout << node->val << ' ';
             nodes.pop();
         }
+    }
+
+    template <typename T>
+    typename BST<T>::Node* BST<T>::find_min() const
+    {
+        if (!m_root)
+        {
+            return nullptr;
+        }
+
+        Node* root = m_root;
+        while (root->left)
+        {
+            root = root->left;
+        }
+
+        return root;
+    }
+    
+    template <typename T>
+    typename BST<T>::Node* BST<T>::find_max() const
+    {
+        if (!m_root)
+        {
+            return nullptr;
+        }
+
+        Node* root = m_root;
+        while (root->right)
+        {
+            root = root->right;
+        }
+
+        return root;
+    }
+
+    template <typename T>
+    typename BST<T>::Node* BST<T>::successor(T value) const
+    {
+        if (!m_root)
+        {
+            return nullptr;
+        }
+
+        Node* root = m_root;
+        while (root && root->val != value)
+        {
+            if (value < root->val)
+            {
+                root = root->left;
+            }
+
+            else
+            {
+                root = root->right;
+            }
+        }
+
+        if (!root)
+        {
+            return root;
+        }
+
+        if (root->left)
+        {
+            return root->left;
+        }
+
+        return root->right;
+    }
+
+    template <typename T>
+    typename BST<T>::Node* BST<T>::predecessor(T value) const
+    {
+        if (!m_root || m_root->val == value)
+        {
+            return nullptr;
+        }
+
+        Node* root = m_root;
+        while (root)
+        {
+            if (value < root->val)
+            {
+                if (root->left && root->left->val == value)
+                {
+                    return root;
+                }
+
+                root = root->left;
+            }
+
+            else
+            {
+                if (root->right && root->right->val == value)
+                {
+                    return root;
+                }
+
+                root = root->right;
+            }
+        }
+
+        return root;
     }
 
     template <typename T>
@@ -298,6 +432,24 @@
         size_t h2 = heightImpl(root->right);
 
         return (h1 > h2) ? h1 + 1 : h2 + 1; 
+    }
+
+    template <typename T>
+    bool BST<T>::is_valid_bst() const
+    {
+        if (!m_root)
+        {
+            return true;
+        }
+
+        return is_valid_bstImpl(m_root);
+    }
+
+    template <typename T>
+    bool BST<T>::is_valid_bstImpl(BST<T>::Node* root) const
+    {
+        return !(root->left && root->val <= root->left->val && !is_valid_bstImpl(root->left)) && 
+               !(root->right && root->val <= root->right->val && !is_valid_bstImpl(root->right));  
     }
 
 #endif
