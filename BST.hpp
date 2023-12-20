@@ -293,6 +293,57 @@
         }
     }
 
+	template <typename T>
+	void BST<T>::print_tree() const
+	{
+		int count = 0;
+		int n = 1;
+		bool check = false;
+		Hayk::Queue<Node*> roots;
+		if (m_root)
+		{
+			roots.push(m_root);
+			count = 1;
+		}
+
+		while (count)
+		{
+			Node* root = roots.front();
+			if (root)
+			{
+				check |= (root->left || root->right);
+				roots.push(root->left);
+				roots.push(root->right);
+				std::cout << '_' << root->val;
+			}
+
+			else
+			{
+				roots.push(nullptr);
+				roots.push(nullptr);
+				std::cout << "_ ";
+			}
+
+			--count;
+			if (!count)
+			{
+				if (!check)
+				{
+					break;
+				}
+				
+				check = false;
+
+				std::cout << std::endl;
+				
+				count = 2 * n;
+				++n;
+			}
+
+			roots.pop();
+		}
+	}
+
     template <typename T>
     typename BST<T>::Node* BST<T>::find_min() const
     {

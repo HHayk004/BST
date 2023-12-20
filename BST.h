@@ -47,6 +47,7 @@
             void preOrder() const;
             void postOrder() const;
             void level_order() const;
+			void print_tree() const;
 
             Node* find_min() const;
             Node* find_max() const;
