@@ -3,6 +3,8 @@
 
     #include <iostream>
     #include <initializer_list>
+    #include "../Queue/queue.h"
+    #include "../Vector/vector.h"
 
     template <typename T>
     class BST {
@@ -21,7 +23,9 @@
             Node* m_root;
             
             void drop(Node* root);
-            
+
+            void copyImpl(Node* root1, Node* root2);
+
             void inOrderImpl(Node* root) const;
             void preOrderImpl(Node* root) const;
             void postOrderImpl(Node* root) const;
@@ -34,6 +38,10 @@
         public:
             BST();
             BST(std::initializer_list<T> list);
+            
+            BST(const BST<T>& tree);
+            void copy(const BST<T>& tree);
+
             ~BST();
             
             void insert(T value);
@@ -59,6 +67,8 @@
             size_t height() const;
 
             bool is_valid_bst() const;
+    
+            MyVector<T> serialize() const;
     };
 
     #include "BST.hpp"

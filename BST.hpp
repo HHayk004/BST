@@ -1,7 +1,5 @@
 #ifndef BST_HPP
     #define BST_HPP
-    
-    #include "../Queue/queue.h"
 
     template <typename T>
     BST<T>::BST() : m_root(nullptr) {}
@@ -13,6 +11,50 @@
         for (auto& elem : list)
         {
             insert(elem);
+        }
+    }
+
+    template <typename T>
+    BST<T>::BST(const BST<T>& tree)
+    {
+        if (tree.m_root)
+        {
+            m_root = new Node(tree.m_root->val);
+            copyImpl(m_root, tree.m_root);
+        }    
+    }
+
+    template <typename T>
+    void BST<T>::copy(const BST<T>& tree)
+    {
+        if (this != &tree)
+        {
+            if (m_root)
+            {
+                drop(m_root);
+            }
+
+            if (tree.m_root)
+            {
+                m_root = new Node(tree.m_root->val);
+                copyImpl(m_root, tree.m_root);
+            }
+        }
+    }
+
+    template <typename T>
+    void BST<T>::copyImpl(Node* root1, Node* root2)
+    {
+        if (root2->left)
+        {
+            root1->left = new Node(root2->left->val);
+            copyImpl(root1->left, root2->left);
+        }
+
+        if (root2->right)
+        {
+            root1->right = new Node(root2->right->val);
+            copyImpl(root1->right, root2->right);
         }
     }
 
@@ -55,7 +97,7 @@
 
         else
         {
-            std::cerr << "Invalid value for node:\n";
+            std::cerr << "Invalid value for root:\n";
             exit(-1);
         }
     }
@@ -272,24 +314,24 @@
     template <typename T>
     void BST<T>::level_order() const
     {
-        Hayk::Queue<Node*> nodes;
-        nodes.push(m_root);
+        Hayk::Queue<Node*> roots;
+        roots.push(m_root);
 
-        while (!nodes.isEmpty())
+        while (!roots.isEmpty())
         {
-            Node* node = nodes.front();
-            if (node->left)
+            Node* root = roots.front();
+            if (root->left)
             {
-                nodes.push(node->left);
+                roots.push(root->left);
             }
 
-            if (node->right)
+            if (root->right)
             {
-                nodes.push(node->right);
+                roots.push(root->right);
             }
 
-            std::cout << node->val << ' ';
-            nodes.pop();
+            std::cout << root->val << ' ';
+            roots.pop();
         }
     }
 
@@ -337,7 +379,7 @@
 				std::cout << std::endl;
 				
 				count = 2 * n;
-				++n;
+				n *= 2;
 			}
 
 			roots.pop();
@@ -503,4 +545,30 @@
                !(root->right && root->val <= root->right->val && !is_valid_bstImpl(root->right));  
     }
 
+    template <typename T>
+    MyVector<T> BST<T>::serialize() const
+    {
+        Hayk::Queue<Node*> roots;
+        MyVector<T> result;
+        roots.push(m_root);
+
+        while (!roots.isEmpty())
+        {
+            Node* root = roots.front();
+            if (root->left)
+            {
+                roots.push(root->left);
+            }
+
+            if (root->right)
+            {
+                roots.push(root->right);
+            }
+
+            result.push_back(root->val);
+            roots.pop();
+        }
+    
+        return result;
+    }
 #endif
