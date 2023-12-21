@@ -3,15 +3,8 @@
 
 int main()
 {
-    BST<int> tree = {10, 5, 18, 12, 13, 22, 21, 24, 20};
+    BST<int> tree = {10, 5, 100, 12, 13, 21, 20};
 
-    BST<int> tree1 = tree;
-
-    tree.print_tree();
-
-    std::cout << "\n\n";
-
-    tree1.print_tree();
-
-    return 0;
+	std::cout << tree.kth_largest(1); 
+	return 0;
 }

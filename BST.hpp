@@ -423,16 +423,16 @@
     template <typename T>
     typename BST<T>::Node* BST<T>::successor(T value) const
     {
-        if (!m_root)
-        {
-            return nullptr;
-        }
-
         Node* root = m_root;
+		Node* result = nullptr;
         while (root && root->val != value)
         {
             if (value < root->val)
             {
+				if (!result || result->val > root->val)
+				{
+					result = root;
+				}
                 root = root->left;
             }
 
@@ -444,51 +444,64 @@
 
         if (!root)
         {
-            return root;
+            return nullptr;
         }
 
-        if (root->left)
+        if (root->right)
         {
-            return root->left;
+			root = root->right;
+			while (root->left)
+			{
+				root = root->left;
+			}
+            
+			return root;
         }
 
-        return root->right;
+        return result;
     }
 
     template <typename T>
     typename BST<T>::Node* BST<T>::predecessor(T value) const
     {
-        if (!m_root || m_root->val == value)
-        {
-            return nullptr;
-        }
-
-        Node* root = m_root;
-        while (root)
+		Node* root = m_root;
+		Node* result = nullptr;
+    	while (root && root->val != value)
         {
             if (value < root->val)
             {
-                if (root->left && root->left->val == value)
-                {
-                    return root;
-                }
-
                 root = root->left;
             }
 
             else
             {
-                if (root->right && root->right->val == value)
-                {
-                    return root;
-                }
-
+				if (!result || result->val < root->val)
+				{
+					result = root;
+				}
                 root = root->right;
             }
         }
 
-        return root;
-    }
+        if (!root)
+        {
+            return nullptr;
+        }
+
+        if (root->left)
+        {
+			root = root->left;
+			while (root->right)
+			{
+				root = root->right;
+			}
+            
+			return root;
+        }
+
+        return result;
+
+	}
 
     template <typename T>
     size_t BST<T>::size() const
@@ -571,4 +584,116 @@
     
         return result;
     }
+
+	template <typename T>
+	MyVector<T> BST<T>::range_query(const T& start, const T& end) const
+	{
+		MyVector<T> result;
+
+		range_queryImpl(m_root, start, end, result);
+
+		return result;
+	}
+
+	template <typename T>
+	void BST<T>::range_queryImpl(BST<T>::Node* root, const T& start, const T& end, MyVector<T>& vec) const
+	{
+		if (root)
+		{
+			if (root->val > end)
+			{
+				range_queryImpl(root->left, start, end, vec);
+			}
+			
+			else if (root->val < start)
+			{
+				range_queryImpl(root->right, start, end, vec);
+			}	
+			
+			else
+			{			
+				if (root->val != start)
+				{
+					range_queryImpl(root->left, start, end, vec);
+				}
+			
+				vec.push_back(root->val);
+				
+				if (root->val != end)
+				{
+					range_queryImpl(root->right, start, end, vec);
+				}
+			}
+		}
+	}
+
+	template <typename T>
+	T BST<T>::kth_smallest(int k) const
+	{
+		if (sizeImpl(m_root) >= k)
+		{	
+			return kth_smallestImpl(m_root, k);
+		}
+
+		return -1;
+	}
+
+	template <typename T>
+	T BST<T>::kth_smallestImpl(Node* root, int k) const
+	{
+		int left_size = 1 + sizeImpl(root->left);
+		if (left_size > k)
+		{
+			return kth_smallestImpl(root->left, k);
+		}
+
+		if (left_size < k)
+		{
+			return kth_smallestImpl(root->right, k - left_size);
+		}
+
+		return root->val;
+	}
+
+	template <typename T>
+	T BST<T>::kth_largest(int k) const
+	{
+		if (sizeImpl(m_root) >= k)
+		{	
+			return kth_largestImpl(m_root, k);
+		}
+
+		return -1;
+	}
+
+	template <typename T>
+	T BST<T>::kth_largestImpl(Node* root, int k) const
+	{
+		int right_size = 1 + sizeImpl(root->right);
+		if (right_size > k)
+		{
+			return kth_largestImpl(root->right, k);
+		}
+
+		if (right_size < k)
+		{
+			return kth_largestImpl(root->left, k - right_size);
+		}
+
+		return root->val;
+	}
+
+	template <typename T>
+	void BST<T>::print_node_val(Node* root) const
+	{
+		if (root)
+		{
+			std::cout << root->val << std::endl;
+		}
+
+		else
+		{
+			std::cout << "nullptr\n";
+		}
+	}
 #endif

@@ -28,13 +28,17 @@
 
             void inOrderImpl(Node* root) const;
             void preOrderImpl(Node* root) const;
-            void postOrderImpl(Node* root) const;
+            void postOrderImpl(Node* root) const;	
 
             size_t sizeImpl(Node* root) const;
             size_t heightImpl(Node* root) const;
             
             bool is_valid_bstImpl(Node* root) const;
 
+			void range_queryImpl(Node* root, const T& start, const T& end, MyVector<T>& vec) const;	
+
+			T kth_smallestImpl(Node* root, int k) const;
+			T kth_largestImpl(Node* root, int k) const;
         public:
             BST();
             BST(std::initializer_list<T> list);
@@ -69,6 +73,13 @@
             bool is_valid_bst() const;
     
             MyVector<T> serialize() const;
+
+			MyVector<T> range_query(const T& start, const T& end) const;
+
+			T kth_smallest(int k) const;
+			T kth_largest(int k) const;
+
+			void print_node_val(Node* root) const;
     };
 
     #include "BST.hpp"
