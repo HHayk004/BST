@@ -37,8 +37,9 @@
 
 			void range_queryImpl(Node* root, const T& start, const T& end, MyVector<T>& vec) const;	
 
-			T kth_smallestImpl(Node* root, int k) const;
-			T kth_largestImpl(Node* root, int k) const;
+			T kth_smallestImpl(Node* root, int k, int& index) const;
+			T kth_largestImpl(Node* root, int k, int& index) const;
+
         public:
             BST();
             BST(std::initializer_list<T> list);
@@ -53,7 +54,10 @@
 
             void clear();
 
-            bool search(T value) const;
+            void update(const T& value, const T& new_value);
+
+            bool search(const T& value) const;
+            bool contains(const T& value) const;
 
             void inOrder() const;
             void preOrder() const;

@@ -235,7 +235,14 @@
     }
 
     template <typename T>
-    bool BST<T>::search(T value) const
+    void BST<T>::update(const T& value, const T& new_value)
+    {
+        remove(value);
+        insert(new_value);
+    }
+        
+    template <typename T>
+    bool BST<T>::search(const T& value) const
     {
         if (value < 0)
         {
@@ -259,6 +266,11 @@
         return root;
     }
 
+    template <typename T>
+    bool BST<T>::contains(const T& value) const
+    {
+        return search(value);
+    }
 
     template <typename T>
     void BST<T>::inOrder() const
@@ -281,6 +293,7 @@
     void BST<T>::preOrder() const
     {
         preOrderImpl(m_root);
+        std::cout << std::endl;
     }
 
     template <typename T>
@@ -298,6 +311,7 @@
     void BST<T>::postOrder() const
     {
         postOrderImpl(m_root);
+        std::cout << std::endl;
     }
 
     template <typename T>
@@ -333,6 +347,7 @@
             std::cout << root->val << ' ';
             roots.pop();
         }
+        std::cout << std::endl;
     }
 
 	template <typename T>
@@ -344,6 +359,7 @@
 		Hayk::Queue<Node*> roots;
 		if (m_root)
 		{
+            std::cout << ":";
 			roots.push(m_root);
 			count = 1;
 		}
@@ -356,14 +372,14 @@
 				check |= (root->left || root->right);
 				roots.push(root->left);
 				roots.push(root->right);
-				std::cout << '_' << root->val;
+				std::cout << root->val << ':';
 			}
 
 			else
 			{
 				roots.push(nullptr);
 				roots.push(nullptr);
-				std::cout << "_ ";
+				std::cout << " :";
 			}
 
 			--count;
@@ -376,7 +392,7 @@
 				
 				check = false;
 
-				std::cout << std::endl;
+				std::cout << std::endl << ':';
 				
 				count = 2 * n;
 				n *= 2;
@@ -384,6 +400,7 @@
 
 			roots.pop();
 		}
+        std::cout << std::endl;
 	}
 
     template <typename T>
@@ -630,57 +647,87 @@
 	template <typename T>
 	T BST<T>::kth_smallest(int k) const
 	{
-		if (sizeImpl(m_root) >= k)
-		{	
-			return kth_smallestImpl(m_root, k);
-		}
+        if (m_root)
+        {	
+            int index = 0;
+			return kth_smallestImpl(m_root, k, index);
+        }
 
 		return -1;
 	}
 
 	template <typename T>
-	T BST<T>::kth_smallestImpl(Node* root, int k) const
+	T BST<T>::kth_smallestImpl(Node* root, int k, int& index) const
 	{
-		int left_size = 1 + sizeImpl(root->left);
-		if (left_size > k)
-		{
-			return kth_smallestImpl(root->left, k);
-		}
+        if (root->left)
+        {
+            int tmp = kth_smallestImpl(root->left, k, index);
+            if (tmp != -1)
+            {
+                return tmp;
+            }
+        }
 
-		if (left_size < k)
-		{
-			return kth_smallestImpl(root->right, k - left_size);
-		}
+        ++index;
+    
+        if (index == k)
+        {
+            return root->val;
+        }
 
-		return root->val;
-	}
+        if (root->right)
+        {
+            int tmp = kth_smallestImpl(root->right, k, index);
+            if (tmp != -1)
+            {
+                return tmp;
+            }
+        }
+
+        return -1;
+    }
 
 	template <typename T>
 	T BST<T>::kth_largest(int k) const
 	{
-		if (sizeImpl(m_root) >= k)
-		{	
-			return kth_largestImpl(m_root, k);
-		}
+		if (m_root)
+        {	
+            int index = 0;
+			return kth_largestImpl(m_root, k, index);
+        }
 
-		return -1;
+        return -1;
 	}
 
 	template <typename T>
-	T BST<T>::kth_largestImpl(Node* root, int k) const
+	T BST<T>::kth_largestImpl(Node* root, int k, int& index) const
 	{
-		int right_size = 1 + sizeImpl(root->right);
-		if (right_size > k)
-		{
-			return kth_largestImpl(root->right, k);
-		}
+		if (root->right)
+        {
+            int tmp = kth_largestImpl(root->right, k, index);
+            if (tmp != -1)
+            {
+                return tmp;
+            }
+        }
 
-		if (right_size < k)
-		{
-			return kth_largestImpl(root->left, k - right_size);
-		}
+        ++index;
+    
+        if (index == k)
+        {
+            return root->val;
+        }
 
-		return root->val;
+        if (root->left)
+        {
+            int tmp = kth_largestImpl(root->left, k, index);
+            if (tmp != -1)
+            {
+                return tmp;
+            }
+        } 
+
+        return -1;
 	}
 
 	template <typename T>
