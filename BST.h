@@ -9,7 +9,7 @@
     template <typename T>
     class BST {
         private:
-            struct Node {
+            struct Node { // our node class
                 public:
                     T val;
                     Node* left;
@@ -20,9 +20,9 @@
             };
 
         private:
-            Node* m_root;
+            Node* m_root; // beginning of our root
             
-            void drop(Node* root);
+            void drop(Node* root); // tree deleter
 
             void copyImpl(Node* root1, Node* root2);
 
@@ -59,31 +59,31 @@
             bool search(const T& value) const;
             bool contains(const T& value) const;
 
-            void inOrder() const;
-            void preOrder() const;
-            void postOrder() const;
+            void inOrder() const; // left, root, right
+            void preOrder() const;// root, left, right
+            void postOrder() const; // left, right, root
             void level_order() const;
 			void print_tree() const;
 
             Node* find_min() const;
             Node* find_max() const;
 
-            Node* successor(T value) const;
-            Node* predecessor(T value) const;
+            Node* successor(T value) const; // the smallest bigger node
+            Node* predecessor(T value) const; // the biggest smaller node
 
             size_t size() const;
             size_t height() const;
 
             bool is_valid_bst() const;
     
-            MyVector<T> serialize() const;
+            MyVector<T> serialize() const; // inorder vector
 
 			MyVector<T> range_query(const T& start, const T& end) const;
 
 			T kth_smallest(int k) const;
 			T kth_largest(int k) const;
 
-			void print_node_val(Node* root) const;
+			void print_node_val(Node* root) const; // my function for tests
     };
 
     #include "BST.hpp"
