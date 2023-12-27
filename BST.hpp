@@ -15,7 +15,7 @@
     }
 
     template <typename T>
-    BST<T>::BST(const BST<T>& tree)
+    BST<T>::BST(const BST<T>& tree) // copy constructor
     {
         if (tree.m_root)
         {
@@ -25,7 +25,7 @@
     }
 
     template <typename T>
-    void BST<T>::copy(const BST<T>& tree)
+    void BST<T>::copy(const BST<T>& tree) // copy public function
     {
         if (this != &tree)
         {
@@ -43,7 +43,7 @@
     }
 
     template <typename T>
-    void BST<T>::copyImpl(Node* root1, Node* root2)
+    void BST<T>::copyImpl(Node* root1, Node* root2) // copy impl function
     {
         // recursive compying of tree
         if (root2->left)
@@ -60,7 +60,7 @@
     }
 
     template <typename T>
-    void BST<T>::drop(Node* root)
+    void BST<T>::drop(Node* root) // destructor helper function
     {
         // recursive deleting of tree
         if (root->left)
@@ -112,7 +112,7 @@
     }
 
     template <typename T>
-    void BST<T>::insert(T value)
+    void BST<T>::insert(T value) // element insert function
     {
         // inserting value by rules of BST with iterative method
         if (value < 0) // value can't be negative
@@ -153,7 +153,7 @@
     }
  
     template <typename T>
-    void BST<T>::remove(T value)
+    void BST<T>::remove(T value) // element remove function
     {
         if (value < 0) // if it's invalid value, return error message
         {
@@ -249,7 +249,7 @@
         }
 
         Node* root = m_root;
-        while (root && root->val != value)
+        while (root && root->val != value) // searching the node
         {
             if (value < root->val)
             {
@@ -272,16 +272,16 @@
     }
 
     template <typename T>
-    void BST<T>::inOrder() const
+    void BST<T>::inOrder() const // inOrder printing public function
     {
         inOrderImpl(m_root); // calling the impl function
         std::cout << std::endl;
     }
 
     template <typename T>
-    void BST<T>::inOrderImpl(BST<T>::Node* root) const
+    void BST<T>::inOrderImpl(BST<T>::Node* root) const // inOrder printing implementation
     {
-        if (root)
+        if (root) // root validity checking
         {
             inOrderImpl(root->left);
             std::cout << root->val << ' ';
@@ -290,16 +290,16 @@
     }
 
     template <typename T>
-    void BST<T>::preOrder() const
+    void BST<T>::preOrder() const // preOrder printing public function
     {
         preOrderImpl(m_root); // calling the impl funciton
         std::cout << std::endl;
     }
 
     template <typename T>
-    void BST<T>::preOrderImpl(BST<T>::Node* root) const
+    void BST<T>::preOrderImpl(BST<T>::Node* root) const // preOrder printing implementation
     {
-        if (root)
+        if (root) // root validity checking
         {
             std::cout << root->val << ' ';
             preOrderImpl(root->left);
@@ -315,7 +315,7 @@
     }
 
     template <typename T>
-    void BST<T>::postOrderImpl(BST<T>::Node* root) const
+    void BST<T>::postOrderImpl(BST<T>::Node* root) const // postOrder private function implementation
     {
         if (root)
         {
@@ -331,7 +331,7 @@
         Hayk::Queue<Node*> roots;
         roots.push(m_root);
 
-        while (!roots.isEmpty())
+        while (!roots.isEmpty()) 
         {
             Node* root = roots.front();
             if (root->left)
@@ -351,11 +351,11 @@
     }
 
 	template <typename T>
-	void BST<T>::print_tree() const
+	void BST<T>::print_tree() const // printing tree levelOrder + endl + nullptr nodes
 	{
-		int count = 0;
-		int n = 1;
-		bool check = false;
+		int count = 0; // current count of nodes
+		int n = 1; // level nodes count
+		bool check = false; // check for not nullptr nodes
 		Hayk::Queue<Node*> roots;
 		if (m_root)
 		{
@@ -367,7 +367,7 @@
 		while (count)
 		{
 			Node* root = roots.front();
-			if (root)
+			if (root) // if root printing it's value
 			{
 				check |= (root->left || root->right);
 				roots.push(root->left);
@@ -375,7 +375,7 @@
 				std::cout << root->val << ':';
 			}
 
-			else
+			else // printing ' '
 			{
 				roots.push(nullptr);
 				roots.push(nullptr);
@@ -394,7 +394,7 @@
 
 				std::cout << std::endl << ':';
 				
-				count = 2 * n;
+				count = 2 * n; // nodes count in current level
 				n *= 2;
 			}
 
@@ -406,7 +406,7 @@
     template <typename T>
     typename BST<T>::Node* BST<T>::find_min() const
     {
-        if (!m_root)
+        if (!m_root) // checking m_root validity
         {
             return nullptr;
         }
@@ -423,7 +423,7 @@
     template <typename T>
     typename BST<T>::Node* BST<T>::find_max() const
     {
-        if (!m_root)
+        if (!m_root) // checking m_root validity
         {
             return nullptr;
         }
@@ -441,8 +441,8 @@
     typename BST<T>::Node* BST<T>::successor(T value) const
     {
         Node* root = m_root;
-		Node* result = nullptr;
-        while (root && root->val != value)
+		Node* result = nullptr; // if root doesn't have right node, result will contain the answer
+        while (root && root->val != value) // finding the value node and saving bigger nodes
         {
             if (value < root->val)
             {
@@ -459,12 +459,12 @@
             }
         }
 
-        if (!root)
+        if (!root) // if there isn't node with this value
         {
             return nullptr;
         }
 
-        if (root->right)
+        if (root->right) // if there is root->right, forget about result node
         {
 			root = root->right;
 			while (root->left)
@@ -479,7 +479,7 @@
     }
 
     template <typename T>
-    typename BST<T>::Node* BST<T>::predecessor(T value) const
+    typename BST<T>::Node* BST<T>::predecessor(T value) const // same lagic as in successor but in opposite
     {
 		Node* root = m_root;
 		Node* result = nullptr;
@@ -538,29 +538,29 @@
     }
 
     template <typename T>
-    size_t BST<T>::height() const
+    size_t BST<T>::height() const // public funrtoin
     {
         return heightImpl(m_root); // calling impl function
     }
 
     template <typename T>
-    size_t BST<T>::heightImpl(Node* root) const // simple using of recursion
+    size_t BST<T>::heightImpl(Node* root) const // height function implementation with simple using of recursion
     {
         if (!root)
         {
             return 0;
         }
 
-        size_t h1 = heightImpl(root->left);
-        size_t h2 = heightImpl(root->right);
+        size_t h1 = heightImpl(root->left) + 1; // max height of left side
+        size_t h2 = heightImpl(root->right) + 1; // max height of right side
 
-        return (h1 > h2) ? h1 + 1 : h2 + 1; 
+        return (h1 > h2) ? h1 : h2; // returning max of h1 and h2
     }
 
     template <typename T>
-    bool BST<T>::is_valid_bst() const
+    bool BST<T>::is_valid_bst() const // checking if we do all right with insert and remove
     {
-        if (!m_root)
+        if (!m_root) // if it's empty tree, it's true
         {
             return true;
         }
@@ -569,14 +569,14 @@
     }
 
     template <typename T>
-    bool BST<T>::is_valid_bstImpl(BST<T>::Node* root) const // using of simple recursion
+    bool BST<T>::is_valid_bstImpl(BST<T>::Node* root) const // is_valid_bst function implementation using of simple recursion
     {
         return !(root->left && root->val <= root->left->val && !is_valid_bstImpl(root->left)) && 
                !(root->right && root->val <= root->right->val && !is_valid_bstImpl(root->right));  
     }
 
     template <typename T>
-    MyVector<T> BST<T>::serialize() const // same logic as in level order
+    MyVector<T> BST<T>::serialize() const // same logic as in level order, but we bush in vector and return it
     {
         Hayk::Queue<Node*> roots;
         MyVector<T> result;
@@ -603,7 +603,7 @@
     }
 
 	template <typename T>
-	MyVector<T> BST<T>::range_query(const T& start, const T& end) const
+	MyVector<T> BST<T>::range_query(const T& start, const T& end) const // public
 	{
 		MyVector<T> result;
 
@@ -613,7 +613,7 @@
 	}
 
 	template <typename T>
-	void BST<T>::range_queryImpl(BST<T>::Node* root, const T& start, const T& end, MyVector<T>& vec) const
+	void BST<T>::range_queryImpl(BST<T>::Node* root, const T& start, const T& end, MyVector<T>& vec) const // range_query function implementation
 	{
 		if (root) // if it isn't nullptr
 		{
@@ -645,9 +645,9 @@
 	}
 
 	template <typename T>
-	T BST<T>::kth_smallest(int k) const
+	T BST<T>::kth_smallest(int k) const // kth_smallest public function
 	{
-        if (m_root)
+        if (m_root) // checking m_root validity
         {	
             int index = 0;
 			return kth_smallestImpl(m_root, k, index); // calling impl function
@@ -657,12 +657,13 @@
 	}
 
 	template <typename T>
-	T BST<T>::kth_smallestImpl(Node* root, int k, int& index) const
+	T BST<T>::kth_smallestImpl(Node* root, int k, int& index) const // kth_smallest function implementation
 	{
+        // using inOrder logic and counting with index
         if (root->left) 
         {
             int tmp = kth_smallestImpl(root->left, k, index);
-            if (tmp != -1)
+            if (tmp != -1) // if tmp != -1, we find the value
             {
                 return tmp;
             }
@@ -670,7 +671,7 @@
 
         ++index;
     
-        if (index == k)
+        if (index == k) // it's base case
         {
             return root->val;
         }
@@ -678,7 +679,7 @@
         if (root->right)
         {
             int tmp = kth_smallestImpl(root->right, k, index);
-            if (tmp != -1)
+            if (tmp != -1) // same as in top
             {
                 return tmp;
             }
@@ -688,9 +689,9 @@
     }
 
 	template <typename T>
-	T BST<T>::kth_largest(int k) const
+	T BST<T>::kth_largest(int k) const // kth_largest public function
 	{
-		if (m_root)
+		if (m_root) // checking m_root validity
         {	
             int index = 0;
 			return kth_largestImpl(m_root, k, index); // calling impl function
@@ -700,8 +701,9 @@
 	}
 
 	template <typename T>
-	T BST<T>::kth_largestImpl(Node* root, int k, int& index) const
+	T BST<T>::kth_largestImpl(Node* root, int k, int& index) const // kth_largest function implementation
 	{
+        // inOrder logic as in kth_smallest but opposite
 		if (root->right)
         {
             int tmp = kth_largestImpl(root->right, k, index);
