@@ -3,16 +3,13 @@
 
 int main()
 {
-    BST<int> tree = {10, 5, 100, 12, 13, 21, 20};
+    BST<int> tree = {10, 5, 19, 12, 13, 21, 20};
 
-    tree.remove(100);
-
-    int size = tree.size();
-    for (int i = 1; i <= size; ++i)
-    {
-        std::cout << tree.kth_smallest(i) << ' ';
-    }
-    std::cout << std::endl;
+    BST<int> tree1 = tree; 
+    BST<int> tree2 = std::move(tree);
 	
+    tree1.print_tree();
+    tree2.print_tree();
+
     return 0;
 }
