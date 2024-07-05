@@ -33,7 +33,7 @@
             size_t sizeImpl(Node* root) const; // implementation of size
             size_t heightImpl(Node* root) const; // implementation of height
             
-            bool is_valid_bstImpl(Node* root) const; // implementation of is_valid
+            bool is_valid_bstImpl(Node* root, Node*& prev) const; // implementation of is_valid
 
 			void range_queryImpl(Node* root, const T& start, const T& end, std::vector<T>& vec) const;	// implementation of range_query
 
