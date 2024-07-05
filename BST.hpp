@@ -639,15 +639,31 @@
             return true;
         }
 
-        return is_valid_bstImpl(m_root); // calling impl funcion
+	Node* prev = nullptr;
+        return is_valid_bstImpl(m_root, prev); // calling impl funcion
     }
 
     template <typename T>
-    bool BST<T>::is_valid_bstImpl(BST<T>::Node* root) const // is_valid_bst method implementation using of simple recursion
+    bool BST<T>::is_valid_bstImpl(Node* root, Node*& prev) const // is_valid_bst method implementation using of simple recursion
     {
-        return !(root->left && root->val <= root->left->val && !is_valid_bstImpl(root->left)) &&  // for left side, checking for values condition and check same for left side,
-                                                                                                  // if it's true, reverse the value for consistency of true
-               !(root->right && root->val <= root->right->val && !is_valid_bstImpl(root->right)); // same for right side
+        if (!root)
+        {
+            return true;
+        }
+
+        if (!rec(root->left, prev))
+        {
+            return false;
+        }
+
+        if (prev && prev->val >= root->val)
+        {
+            return false;
+        }
+
+        prev = root;
+
+        return rec(root->right, prev);
     }
 
     template <typename T>
